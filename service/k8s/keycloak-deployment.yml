@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - name: keycloak
+          image: quay.io/keycloak/keycloak:24.0.0
+          args:
+            - start-dev
+            - --import-realm
+          env:
+            - name: KEYCLOAK_ADMIN
+              value: admin
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value: admin
+
+            # Frontend (browser / port-forward)
+            - name: KC_HOSTNAME
+              value: localhost
+            - name: KC_HOSTNAME_STRICT
+              value: "false"
+
+            # Backchannel (service-to-service, JWT issuer)
+            - name: KC_HOSTNAME_BACKCHANNEL
+              value: keycloak
+
+            - name: KC_HTTP_ENABLED
+              value: "true"
+
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: realm-import
+              mountPath: /opt/keycloak/data/import
+      volumes:
+        - name: realm-import
+          configMap:
+            name: fraud-realm-config

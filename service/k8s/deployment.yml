@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fraud-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: fraud-api
+  template:
+    metadata:
+      labels:
+        app: fraud-api
+    spec:
+      containers:
+        - name: fraud-api
+          image: fraud-assignment:final-version
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9090
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: default
+            - name: AWS_PROFILE
+              value: default
+            - name: AWS_REGION
+              value: us-east-1
+          volumeMounts:
+            - name: aws-config
+              mountPath: /root/.aws
+              readOnly: true
+
+          volumes:
+            - name: aws-config
+              secret:
+                secretName: aws-credentials
+

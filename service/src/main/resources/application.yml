@@ -1,0 +1,9 @@
+server:
+  port: 9090
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://keycloak:8080/realms/fraud-realm/protocol/openid-connect/certs

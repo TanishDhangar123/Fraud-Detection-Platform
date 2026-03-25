@@ -1,0 +1,55 @@
+{
+  "realm": "fraud-realm",
+  "enabled": true,
+
+  "roles": {
+    "realm": [
+      {
+        "name": "fraud-api-access",
+        "description": "Access to Fraud Detection API"
+      }
+    ]
+  },
+
+  "clients": [
+    {
+      "clientId": "fraud-api-client",
+      "name": "Fraud Detection API Client",
+      "protocol": "openid-connect",
+      "enabled": true,
+      "publicClient": false,
+      "serviceAccountsEnabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "fraud-secret",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "defaultClientScopes": [
+        "profile",
+        "email"
+      ]
+    }
+  ],
+
+  "clientScopes": [
+    {
+      "name": "roles",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true"
+      },
+      "protocolMappers": [
+        {
+          "name": "realm roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "claim.name": "roles",
+            "access.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ]
+}

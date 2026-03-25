@@ -1,0 +1,8 @@
+
+logs/
+.git/
+.idea/
+node_modules/
+terraform/
+jenkins/
+*.log
